@@ -36,7 +36,11 @@ jobs:
       - name: Build Release app
         run: |
           set -o pipefail
-          mkdir -p Build
+          mkdir -p Build/entitlements
+          # USB accessory access requires a provisioning profile; ad-hoc apps cannot claim it.
+          cp VirtualBuddy/Config/Entitlements/VirtualBuddy.entitlements Build/entitlements/
+          /usr/libexec/PlistBuddy -c 'Delete :com.apple.developer.accessory-access.usb' \
+            Build/entitlements/VirtualBuddy.entitlements
           # Keep the non-managed XPC configuration and disable upstream Sparkle updates.
           xcodebuild \
             -project VirtualBuddy.xcodeproj \
@@ -50,6 +54,7 @@ jobs:
             ENABLE_HARDENED_RUNTIME=NO \
             DEVELOPMENT_TEAM= \
             PROVISIONING_PROFILE_SPECIFIER= \
+            "ENTITLEMENTS_DIR=$PWD/Build/entitlements" \
             VB_BUNDLE_ID_PREFIX=com.aiello. \
             'OTHER_SWIFT_FLAGS=-D BUILDING_NON_MANAGED_RELEASE -D ALLOW_NON_MANAGED_RELEASE' \
             build 2>&1 | tee Build/build.log
@@ -82,7 +87,7 @@ jobs:
             echo
             echo 'Download the DMG from the artifact below, open it, and drag VirtualBuddy to Applications.'
             echo 'This is an ad-hoc signed, unnotarized ARM64 build. macOS may require Open Anyway in Privacy & Security.'
-            echo 'Upstream automatic updates are disabled. Bridged networking requires a managed signing profile and is unavailable in this build.'
+            echo 'Upstream automatic updates, bridged networking, and USB accessory passthrough are unavailable in this build.'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload installer

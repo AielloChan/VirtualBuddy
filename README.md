@@ -87,7 +87,7 @@ The **Build macOS app** workflow runs on pushes to `main` and can also be starte
 
 After a successful run, download the `VirtualBuddy-…-arm64-…` artifact. Extract the ZIP, open the DMG, and drag VirtualBuddy into Applications. The artifact contains a SHA-256 checksum and is retained for 7 days.
 
-This build uses ad-hoc signing without Apple notarization or signing secrets. Hardened Runtime is disabled for this build because its embedded frameworks have no signing Team ID. macOS may require **System Settings → Privacy & Security → Open Anyway** on first launch. Bridged networking is unavailable without the managed entitlement; use the default shared network. Upstream Sparkle updates are disabled in this build, so obtain updates by running the workflow again. Features that require newer macOS versions remain subject to the host OS requirements.
+This build uses ad-hoc signing without Apple notarization or signing secrets. Hardened Runtime is disabled for this build because its embedded frameworks have no signing Team ID. macOS may require **System Settings → Privacy & Security → Open Anyway** on first launch. Bridged networking and USB accessory passthrough are unavailable because their entitlements require provisioning profiles; use the default shared network. The workflow removes the restricted USB entitlement only from its build-time copy. Upstream Sparkle updates are disabled in this build, so obtain updates by running the workflow again. Features that require newer macOS versions remain subject to the host OS requirements.
 
 ### Building locally
 
