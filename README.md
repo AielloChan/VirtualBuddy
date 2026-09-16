@@ -81,7 +81,17 @@ mkdir -p ~/Desktop/VirtualBuddyShared && mount -t virtiofs VirtualBuddyShared ~/
 
 ## Building
 
-**Xcode 16** is required for building on `main`.
+### Building this fork with GitHub Actions
+
+The **Build macOS app** workflow runs on pushes to `main` and can also be started from **Actions → Build macOS app → Run workflow**. It uses GitHub's `xcode-27` ARM64 runner, so the local Mac does not need Xcode 27.
+
+After a successful run, download the `VirtualBuddy-…-arm64-…` artifact. Extract the ZIP, open the DMG, and drag VirtualBuddy into Applications. The artifact contains a SHA-256 checksum and is retained for 7 days.
+
+This build uses ad-hoc signing without Apple notarization or signing secrets. macOS may require **System Settings → Privacy & Security → Open Anyway** on first launch. Bridged networking is unavailable without the managed entitlement; use the default shared network. Upstream Sparkle updates are disabled in this build, so obtain updates by running the workflow again. Features that require newer macOS versions remain subject to the host OS requirements.
+
+### Building locally
+
+The current `main` requires **Xcode 27** with Swift 6.4 and the macOS 27 SDK.
 
 - Open the `VirtualBuddy/Config/Signing.xcconfig` file
 - Set the `VB_BUNDLE_ID_PREFIX` variable to something unique like `com.yourname.`
