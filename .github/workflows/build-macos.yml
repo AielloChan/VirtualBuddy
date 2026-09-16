@@ -47,6 +47,7 @@ jobs:
             -onlyUsePackageVersionsFromResolvedFile \
             CODE_SIGN_IDENTITY=- \
             CODE_SIGN_STYLE=Manual \
+            ENABLE_HARDENED_RUNTIME=NO \
             DEVELOPMENT_TEAM= \
             PROVISIONING_PROFILE_SPECIFIER= \
             VB_BUNDLE_ID_PREFIX=com.aiello. \
